@@ -23,3 +23,4 @@ kubectl get nodes should show three nodes in ready status.
 ## Todo
 - Fix master.yml
 - Fix task "disable SELinux" to avoid failing hard wenn the playbook is run a second time
+- Open Port 6443 only on the master
