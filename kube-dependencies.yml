@@ -1,0 +1,82 @@
+- hosts: all
+  become: yes
+  tasks:
+   - name: install Docker
+     yum:
+       name: docker
+       state: present
+       update_cache: true
+
+   - name: start Docker
+     service:
+       name: docker
+       state: started
+       enabled: yes
+
+   - name: disable SELinux
+     command: setenforce 0
+
+   - name: disable SELinux on reboot
+     selinux:
+       state: disabled
+
+   - name: ensure net.bridge.bridge-nf-call-ip6tables is set to 1
+     sysctl:
+      name: net.bridge.bridge-nf-call-ip6tables
+      value: 1
+      state: present
+
+   - name: ensure net.bridge.bridge-nf-call-iptables is set to 1
+     sysctl:
+      name: net.bridge.bridge-nf-call-iptables
+      value: 1
+      state: present
+
+   - name: ensure port 6443 is open
+     firewalld:
+       port: 6443/tcp
+       permanent: yes
+       state: enabled
+
+   - name: ensure port 10250 is open
+     firewalld:
+       port: 10250/tcp
+       permanent: yes
+       state: enabled
+
+   - name: install kubelet
+     yum:
+        name: kubelet-1.13.3
+        state: present
+        update_cache: true
+
+   - name: install kubeadm
+     yum:
+        name: kubeadm-1.13.3
+        state: present
+
+   - name: start kubelet
+     service:
+       name: kubelet
+       enabled: yes
+       state: started
+
+   - name: Remove swapfile from /etc/fstab
+     mount:
+       name: swap
+       fstype: swap
+       state: absent
+
+   - name: Disable swap
+     command: swapoff -a
+
+- hosts: master
+  become: yes
+  tasks:
+   - name: install kubectl
+     yum:
+        name: kubectl-1.13.3
+        state: present
+        allow_downgrade: yes
+
+
