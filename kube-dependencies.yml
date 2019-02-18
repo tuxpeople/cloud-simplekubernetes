@@ -79,4 +79,11 @@
         state: present
         allow_downgrade: yes
 
-
+- hosts: workers
+  become: yes
+  tasks:
+   - name: ensure NodePorts are open
+     firewalld:
+       port: 30000-32767/tcp
+       permanent: yes
+       state: enabled
