@@ -1,5 +1,13 @@
 # cloud-simplekubernetes
 
+---
+**NOTE**
+
+This repository is now not longer actively maintained and therefor archived.
+
+---
+
+
 ## Warning
 This is more or less my personal braindump. The content of this repo should be considered als unfinished, untestet and potentially harmfull. You have been warned.
 
